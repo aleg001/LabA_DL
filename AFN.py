@@ -8,14 +8,9 @@ Alejandro Gomez 20347
 
 """
 
+from InfixPostfix import *
+
 # Clase AFN
-class AFN:
-    def __init__(self):
-        # Se define estados, transiciones, estado inicial y estados finales
-        self.estados = []
-        self.transiciones = []
-        self.EI = None
-        self.EF = []
 
 
 # Clase Estado
@@ -35,13 +30,39 @@ class Transicion:
         self.eF = eF
 
 
-class Pasos:
-    def __init__(self):
+# Clase AFN
+class AFN:
+    def __init__(self, estadoI, estadoF, estadosN, transiciones, estados):
         # Se define estados, transiciones, estado inicial y estados finales
+        self.estados = estados
+        self.transiciones = transiciones
+        self.EI = estadoI
+        self.EF = estadoF
+        self.EN = estadosN
+
+
+class TransicionesConstruccion:
+    def __init__(self, rE):
+        self.rE = rE
+        self.EN = 0
         self.estados = []
-        self.transiciones = []
-        self.EI = None
-        self.EF = []
+        self.AFNS = []
+        self.epsilon = "E"
+
+        self.postfix = InfixPostfix(rE).Infix_Postfix()
+        self.alfabeto = InfixPostfix(rE).Alfabeto()
+
+    def Transiciones(self, t):
+        final = []
+        stack = [t]
+
+        while stack:
+            t = stack.pop()
+            if isinstance(t, list):
+                stack.extend(t)
+            else:
+                final.append(t)
+        return final
 
     def Simbolo(self, S):
         # Se crea el estado inicial y final
