@@ -39,63 +39,62 @@ class InfixPostfix:
         # Se retorna el alfabeto
         return sorted(list(alphabet_chars))
 
+    def Infix_Postfix(self):
+        # Input vacio
+        if not self.expression:
+            raise ValueError("ERROR: Input vacio")
 
-def Infix_Postfix(self):
-    # Input vacio
-    if not self.expression:
-        raise ValueError("ERROR: Input vacio")
+        # Declaración de variables
+        stack = []
+        postfix = ""
 
-    # Declaración de variables
-    stack = []
-    postfix = ""
+        # Recorrido de la expresión
+        for i in self.expression:
+            # Verificar si es un operador
+            if i in self.operators:
 
-    # Recorrido de la expresión
-    for i in self.expression:
-        # Verificar si es un operador
-        if i in self.operators:
+                while (
+                    stack
+                    and stack[-1] != "("
+                    and self.priority[i] <= self.priority[stack[-1]]
+                ):
+                    # Se agrega el operador a la expresión
+                    postfix += stack.pop()
+                # Se agrega el operador al stack
+                stack.append(i)
+            elif i == "(":
+                # Se agrega el paréntesis al stack
+                stack.append(i)
 
-            while (
-                stack
-                and stack[-1] != "("
-                and self.priority[i] <= self.priority[stack[-1]]
-            ):
-                # Se agrega el operador a la expresión
-                postfix += stack.pop()
-            # Se agrega el operador al stack
-            stack.append(i)
-        elif i == "(":
-            # Se agrega el paréntesis al stack
-            stack.append(i)
+            elif i == ")":
+                if "(" not in stack:
+                    # Se verifica que el paréntesis tenga cierre
+                    raise ValueError("Error: No se cerraron los parentesis chavo!")
 
-        elif i == ")":
-            if "(" not in stack:
-                # Se verifica que el paréntesis tenga cierre
-                raise ValueError("Error: No se cerraron los parentesis chavo!")
+                while stack and stack[-1] != "(":
+                    # Se agrega el operador a la expresión
+                    postfix += stack.pop()
+                # Se elimina el paréntesis del stack
+                stack.pop()
+            else:
+                # Se verifica que el caracter se encuentre en el alfabeto
+                if i not in set(
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+                ):
+                    raise ValueError(
+                        f"Chavo... Has ingresado este caracter que no pertenece!: {i}"
+                    )
+                # Se agrega el caracter a la expresión
+                postfix += i
 
-            while stack and stack[-1] != "(":
-                # Se agrega el operador a la expresión
-                postfix += stack.pop()
-            # Se elimina el paréntesis del stack
-            stack.pop()
-        else:
-            # Se verifica que el caracter se encuentre en el alfabeto
-            if i not in set(
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-            ):
-                raise ValueError(
-                    f"Chavo... Has ingresado este caracter que no pertenece!: {i}"
-                )
-            # Se agrega el caracter a la expresión
-            postfix += i
+        # Verificacion de parentesis
+        if "(" in stack:
+            raise ValueError("Error de parentesis amigo XD")
 
-    # Verificacion de parentesis
-    if "(" in stack:
-        raise ValueError("Error de parentesis amigo XD")
+        # Se agrega el stack a la expresión
+        while stack:
+            # Se agrega el operador a la expresión
+            postfix += stack.pop()
 
-    # Se agrega el stack a la expresión
-    while stack:
-        # Se agrega el operador a la expresión
-        postfix += stack.pop()
-
-    # Se devuelve la expresión en postfix
-    return postfix
+        # Se devuelve la expresión en postfix
+        return postfix
