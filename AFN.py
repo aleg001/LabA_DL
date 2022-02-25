@@ -10,25 +10,6 @@ Alejandro Gomez 20347
 
 from InfixPostfix import *
 
-# Clase AFN
-
-
-# Clase Estado
-class Estado:
-    def __init__(self, id):
-        # Se define el id del estado
-        self.id = id
-        self.transiciones = {}
-
-
-# Clase Transicion
-class Transicion:
-    def __init__(self, s, eI, eF):
-        # Se define el simbolo, estado inicial y estado final
-        self.s = s
-        self.eI = eI
-        self.eF = eF
-
 
 # Clase AFN
 class AFN:
@@ -41,12 +22,28 @@ class AFN:
         self.EN = estadosN
 
 
+# Clase Transicion
+class Transicion:
+    def __init__(self, s, eI, eF):
+        # Se define el simbolo, estado inicial y estado final
+        self.s = s
+        self.eI = eI
+        self.eF = eF
+
+
+# Clase Estado
+class Estado:
+    def __init__(self, id):
+        # Se define el id del estado
+        self.id = id
+
+
 class TransicionesConstruccion:
     def __init__(self, rE):
         self.rE = rE
         self.EN = 0
         self.estados = []
-        self.AFNS = []
+        self.groupAFN = []
         self.epsilon = "E"
 
         self.postfix = InfixPostfix(rE).Infix_Postfix()
@@ -63,6 +60,40 @@ class TransicionesConstruccion:
             else:
                 final.append(t)
         return final
+
+    def ThompsonAlgorithm(self):
+
+        for i in self.postfix:
+            self.Thompson(i)
+
+        self.groupAFN[0].EN = self.EN
+        return self.groupAFN[0]
+
+    def Thompson(self, i):
+
+        if i in self.alfabeto:
+            self.groupAFN.append(self.Simbolo(i))
+        else:
+            if i == ".":
+                afn1 = self.groupAFN.pop()
+                afn2 = self.groupAFN.pop()
+                self.groupAFN.append(self.Concatenacion(afn2, afn1))
+
+            elif i == "|":
+                afn1 = self.groupAFN.pop()
+                afn2 = self.groupAFN.pop()
+                self.groupAFN.append(self.Union(afn2, afn1))
+            elif i == "*":
+                afn = self.groupAFN.pop()
+                self.groupAFN.append(self.Kleene(afn))
+
+            elif i == "+":
+                afn = self.groupAFN.pop()
+                self.groupAFN.append(self.Kleene(afn))
+
+            elif i == "?":
+                afn = self.groupAFN.pop()
+                self.groupAFN.append(self.Interrogacion(afn))
 
     def Simbolo(self, S):
         # Se crea el estado inicial y final
@@ -143,7 +174,7 @@ class TransicionesConstruccion:
             transicion = Transicion("E", i, eF)
             transiciones.append(transicion)
 
-    def QuestionMark(self, AFN):
+    def Interrogacion(self, AFN):
         eI = Estado(0)
         eF = Estado(1)
         transiciones = AFN.transiciones
