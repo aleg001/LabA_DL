@@ -18,9 +18,12 @@ La clase Transicion define una transición entre dos estados utilizando un símb
 La clase Estado define un estado por su identificador. 
 """
 
+from AFN_Abstract import *
+
+from Automata import *
 
 # Clase AFN
-class AFN:
+class AFN(Automata):
     """
     Esta clase define un AFN utilizando sus estados inicial y final, un conjunto de todos los estados y un conjunto de transiciones entre estados.
     """
@@ -36,7 +39,7 @@ class AFN:
 
 
 # Clase Transicion
-class Transicion:
+class Transicion(Transicion):
     """
     Esta clase define una transicion entre dos estados utilizando un simbolo.
     """
@@ -47,7 +50,7 @@ class Transicion:
 
 
 # Clase Estado
-class Estado:
+class Estado(Estado):
     """
     Esta clase define un estado por su identificador.
     """
