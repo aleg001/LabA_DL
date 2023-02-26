@@ -96,6 +96,9 @@ class TransicionesConstruccion:
                 self.groupAFN.append(self.Interrogacion(afn))
 
     def Simbolo(self, S):
+
+        EI, EF = Estado(self.EN), Estado(self.EN + 1)
+        self.EN += 2
         # Se crea el estado inicial y final
         EI = Estado(0)
         EF = Estado(1)
