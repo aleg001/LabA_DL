@@ -1,4 +1,3 @@
-
 """
 Basado en lo presentado por el
 catedrático Bidkar Pojoy
@@ -17,6 +16,7 @@ from InfixPostfix import *
 from AFN_Abstract import ConstruccionAbstract
 
 from AFN import *
+
 
 class TransicionesConstruccion(ConstruccionAbstract):
 
@@ -53,7 +53,7 @@ class TransicionesConstruccion(ConstruccionAbstract):
                 final.append(t)
         # Se devuelve la lista
         return final
-    
+
     # Función Thompson
 
     def ThompsonAlgorithm(self):
@@ -78,7 +78,7 @@ class TransicionesConstruccion(ConstruccionAbstract):
                 self.groupAFN.append(self.Union(afn2, afn1))
             # cerradura de kleene
             elif i == "*":
-                afn = self.groupAFN.pop() 
+                afn = self.groupAFN.pop()
                 self.groupAFN.append(self.CerraduraKleene(afn))
             # cerradura positiva
             elif i == "+":

@@ -34,8 +34,7 @@ class AFN(Automata):
         self.transiciones = transiciones
         self.EI = estadoI
         self.EF = estadoF
-        self.EN = estadosN 
-        
+        self.EN = estadosN
 
 
 # Clase Transicion
@@ -59,4 +58,8 @@ class Estado(Estado):
         # Se define el id del estado
         self.id = id
 
+    def __str__(self):
+        return f"q{self.id}"
 
+    def __repr__(self):
+        return str(self)

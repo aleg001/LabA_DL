@@ -1,14 +1,15 @@
+"""
+Definición:
+Permite exportar/abrir un autómata finito no determinístico (AFN) a una imagen en formato PNG usando la biblioteca Graphviz.
+"""
 import graphviz  # pip install graphviz
 import PIL as pil  # pip install pillow
 
 
 class ExportAFN:
-    def __init__(self, path):
-        self.graph = graphviz.Digraph(format="png", name=("AFN"))
-        self.graph.node("ini", style="invis")
-
-    def Export(self, AFN):
-        grapvizDigraph = self.graph
+    def Export(AFN, Regex):
+        grapvizDigraph = graphviz.Digraph(comment=Regex)
+        grapvizDigraph.attr(rankdir="LR", size="8,5")
         for i in AFN.estados:
             if i in AFN.EF:
                 grapvizDigraph.node(str(i), shape="doublecircle")

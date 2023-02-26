@@ -12,14 +12,9 @@ McNaughton-Yamada-Thompson
 Validar regex, correcto balance, manejar errores
 """
 
-from InfixPostfix import *
-
 import sys
-
-def main(argument):
-    print("HOLA: ", argument)
+import Controller as c
 
 arg = sys.argv[1]
 
-main(arg)
-
+c.main(arg)

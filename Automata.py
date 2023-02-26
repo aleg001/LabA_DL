@@ -1,10 +1,10 @@
-
 """
 Definicion de clases abstractas para automata.
 Usado para definir las clases de AFN y AFD
 
 """
 from abc import ABC, abstractmethod
+
 
 class Automata(ABC):
     """
