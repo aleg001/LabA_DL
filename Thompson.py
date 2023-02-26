@@ -34,18 +34,27 @@ class TransicionesConstruccion(ConstruccionAbstract):
         self.postfix = InfixPostfix(rE).Infix_Postfix()
         self.alfabeto = InfixPostfix(rE).Alfabeto()
 
-    # Método transciiones
+    # Función transiciones
     def Transiciones(self, t):
+        # Se crea una lista vacia
         final = []
+        # Se crea una pila
         stack = [t]
-
+        # Se recorre la pila
         while stack:
+            # Se saca el ultimo elemento
             t = stack.pop()
+            # Si es una lista
             if isinstance(t, list):
+                # Se agrega a la pila
                 stack.extend(t)
             else:
+                # Se agrega a la lista
                 final.append(t)
+        # Se devuelve la lista
         return final
+    
+    # Función Thompson
 
     def ThompsonAlgorithm(self):
         # Se recorre la expresion regular
