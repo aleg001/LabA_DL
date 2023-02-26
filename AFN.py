@@ -42,7 +42,7 @@ class TransicionesConstruccion:
     def __init__(self, rE):
         self.rE = rE
         self.EN = 0
-        self.estados = []
+        self.estados = set()
         self.groupAFN = []
         self.epsilon = "E"
 
@@ -99,20 +99,16 @@ class TransicionesConstruccion:
 
         EI, EF = Estado(self.EN), Estado(self.EN + 1)
         self.EN += 2
-        # Se crea el estado inicial y final
-        EI = Estado(0)
-        EF = Estado(1)
 
         # Se crea la transicion
-        transicion = Transicion(S, EI, EF)
+        transicion = self.Transiciones(Transicion(EI, S, EF))
 
         # Se agregan los estados y transiciones
-        self.estados = [EI, EF]
-        self.transiciones = [transicion]
+        self.estados.update([EI, EF])
 
-        # Se define el estado inicial y final
-        self.EI = EI
-        self.EF = [EF]
+        Estados = [EI, EF]
+
+        return AFN(EI, EF, self.EN, transicion, Estados)
 
     def Union(self, AFN, AFN2):
         # Se crea el estado inicial y final
