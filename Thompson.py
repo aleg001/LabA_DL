@@ -34,6 +34,7 @@ class TransicionesConstruccion(ConstruccionAbstract):
         self.postfix = InfixPostfix(rE).Infix_Postfix()
         self.alfabeto = InfixPostfix(rE).Alfabeto()
 
+    # Método transciiones
     def Transiciones(self, t):
         final = []
         stack = [t]
