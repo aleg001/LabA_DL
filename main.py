@@ -16,10 +16,10 @@ from InfixPostfix import *
 
 import sys
 
+def main(argument):
+    print("HOLA: ", argument)
 
-if __name__ == "__main__":
-    if len(sys.argv) == 2:
-        argument = sys.argv[1]
-        main(argument)
-    else:
-        print("Error: Ingresa un argumento")
+arg = sys.argv[1]
+
+main(arg)
+
