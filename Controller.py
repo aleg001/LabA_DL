@@ -22,4 +22,9 @@ from Thompson import *
 def main(argument):
     regex = InfixPostfix(argument).Infix_Postfix()
     AutomataFN = TransicionesConstruccion(regex).ThompsonAlgorithm()
+    print("Regex: ", regex)
+    print("Transiciones: ", AutomataFN.transiciones)
+    print("Estados: ", AutomataFN.estados)
+    print("Estado inicial: ", AutomataFN.EI)
+    print("Estados finales: ", AutomataFN.EF)
     GraphAFN.Show(AutomataFN)

@@ -30,17 +30,20 @@ class GraphAFN:
         estados = [(i) for i in AFN1.estados]
         for i in estados:
             if i == AFN1.EI:
+                grapvizDigraph.edge("start", str(i), style="invis")
+                grapvizDigraph.node("start", shape="point")
                 grapvizDigraph.node(
                     str(i), shape="circle", style="filled", fillcolor="green"
                 )
-            if i == AFN1.EF:
-                grapvizDigraph.node(str(i), shape="doublecircle", style="filled")
+            elif i == AFN1.EF:
+                grapvizDigraph.node(str(i), shape="doublecircle")
             else:
                 grapvizDigraph.node(str(i), shape="circle")
 
         transiciones = [i for i in AFN1.transiciones]
         for i in transiciones:
             Inicial, Simbolo, Final = str(i.eI), str(i.s), str(i.eF)
+
             grapvizDigraph.edge(Inicial, Final, label=str(Simbolo))
         # Conversion imagen
         pngBytes = grapvizDigraph.pipe(format="png")
