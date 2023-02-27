@@ -35,6 +35,7 @@ class AFN(Automata):
         self.EI = estadoI
         self.EF = estadoF
         self.EN = estadosN
+        self.epsilon = "E"
 
 
 # Clase Transicion
@@ -46,6 +47,12 @@ class Transicion(Transicion):
     def __init__(self, s, eI, eF):
         # Se define el simbolo, estado inicial y estado final
         self.s, self.eI, self.eF = s, eI, eF
+
+    def __str__(self):
+        return f"{self.eI}-{self.s}-{self.eF}"
+
+    def __repr__(self):
+        return str(self)
 
 
 # Clase Estado
@@ -59,7 +66,7 @@ class Estado(Estado):
         self.id = id
 
     def __str__(self):
-        return f"q{self.id}"
+        return f"{self.id}"
 
     def __repr__(self):
         return str(self)

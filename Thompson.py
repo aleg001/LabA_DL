@@ -60,7 +60,9 @@ class TransicionesConstruccion(ConstruccionAbstract):
         # Se recorre la expresion regular
         [self.Thompson(i) for i in self.postfix]
         # Se agrega la transicion final
-        self.groupAFN[0].EN = self.EN
+        countEstados = len(self.groupAFN[0].estados)
+        self.groupAFN[0].EN = countEstados
+
         return self.groupAFN[0]
 
     def Thompson(self, i):
@@ -103,18 +105,18 @@ class TransicionesConstruccion(ConstruccionAbstract):
         # Se retorna el AFN
         return AFN(EI, EF, self.EN, transiciones, Estados)
 
-    def Union(self, AFN, AFN2):
+    def Union(self, AFN1, AFN2):
         # Se crea el estado inicial y final
         EI, EF = Estado(self.EN), Estado(self.EN + 1)
         self.EN += 2
         # Se agregan las transiciones
         transiciones = (
-            AFN.transiciones
+            AFN1.transiciones
             + AFN2.transiciones
             + [
-                Transicion(self.epsilon, AFN.EI, EF),
+                Transicion(self.epsilon, AFN1.EI, EF),
                 Transicion(self.epsilon, AFN2.EI, EF),
-                Transicion(self.epsilon, EI, AFN.EI),
+                Transicion(self.epsilon, EI, AFN1.EI),
                 Transicion(self.epsilon, EI, AFN2.EI),
             ]
         )
@@ -122,87 +124,88 @@ class TransicionesConstruccion(ConstruccionAbstract):
         trans_dict = {t: None for t in transiciones}
         transiciones = list(trans_dict.keys())
         # Se agregan los estados y transiciones
-        estados = AFN.estados + AFN2.estados + [EI, EF]
+        estados = AFN1.estados + AFN2.estados + [EI, EF]
         self.estados.update(estados)
         # Se retorna el AFN
         return AFN(EI, EF, self.EN, self.Transiciones(transiciones), estados)
 
-    def Concatenacion(self, AFN, AFN2):
+    def Concatenacion(self, AFN1, AFN2):
         # Se eliminan las transiciones repetidas
-        AFN.estados.remove(AFN.EF)
+        AFN1.estados.remove(AFN1.EF)
         # Se agregan las transiciones
         for estado in AFN2.estados:
-            estado.id += AFN.EN - 1
-            estado.eI += AFN.EN - 1
-            estado.eF += AFN.EN - 1
-        AFN2.EI += AFN.EN - 1
-        AFN2.EF += AFN.EN - 1
+            estado.id += AFN1.EN - 1
+            estado.eI += AFN1.EN - 1
+            estado.eF += AFN1.EN - 1
+        AFN2.EI += AFN1.EN - 1
+        AFN2.EF += AFN1.EN - 1
         # Se agregan los estados y transiciones
-        estados = AFN.estados + AFN2.estados
+        estados = AFN1.estados + AFN2.estados
         transiciones = (
-            AFN.transiciones
+            AFN1.transiciones
             + AFN2.transiciones
-            + [Transicion(self.epsilon, AFN.EF, AFN2.EI)]
+            + [Transicion(self.epsilon, AFN1.EF, AFN2.EI)]
         )
         # Se retorna el AFN
-        return AFN(AFN.EI, AFN2.EF, self.EN, self.Transiciones(transiciones), estados)
+        return AFN(AFN1.EI, AFN2.EF, self.EN, self.Transiciones(transiciones), estados)
 
-    def CerraduraKleene(self, AFN):
+    def CerraduraKleene(self, AFN1):
         # Se crea el estado inicial y final
         EI, EF = Estado(self.EN), Estado(self.EN + 1)
         self.EN += 2
         # Se agregan las transiciones
-        transiciones = AFN.transiciones + [
-            Transicion(self.epsilon, AFN.EF, AFN.EI),
-            Transicion(self.epsilon, EI, AFN.EI),
-            Transicion(self.epsilon, AFN.EF, EF),
+        transiciones = AFN1.transiciones + [
+            Transicion(self.epsilon, AFN1.EF, AFN1.EI),
+            Transicion(self.epsilon, EI, AFN1.EI),
+            Transicion(self.epsilon, AFN1.EF, EF),
             Transicion(self.epsilon, EI, EF),
         ]
         # Se eliminan las transiciones repetidas
         trans_dict = {t: None for t in transiciones}
         transiciones = list(trans_dict.keys())
         # Se agregan los estados y transiciones
-        estados = AFN.estados + [EI, EF]
+        estados = AFN1.estados + [EI, EF]
         self.estados.update(estados)
         # Se retorna el AFN
         return AFN(EI, EF, self.EN, self.Transiciones(transiciones), estados)
 
-    def CerraduraKleene2(self, AFN):
+    def CerraduraKleene2(self, AFN1):
         # Se crea el estado inicial y final
         EI, EF = Estado(self.EN), Estado(self.EN + 1)
         self.EN += 2
         # Se agregan las transiciones
-        transiciones = AFN.transiciones + [
-            Transicion(self.epsilon, AFN.EF, AFN.EI),
-            Transicion(self.epsilon, EI, AFN.EI),
-            Transicion(self.epsilon, AFN.EF, EF),
+        transiciones = AFN1.transiciones + [
+            Transicion(self.epsilon, AFN1.EF, AFN1.EI),
+            Transicion(self.epsilon, EI, AFN1.EI),
+            Transicion(self.epsilon, AFN1.EF, EF),
         ]
         # Se eliminan las transiciones repetidas
         trans_dict = {t: None for t in transiciones}
         transiciones = list(trans_dict.keys())
 
         # Se agregan los estados y transiciones
-        estados = AFN.estados + [EI, EF]
+        estados = AFN1.estados + [EI, EF]
         self.estados.update(estados)
 
         # Se retorna el AFN
         return AFN(EI, EF, self.EN, self.Transiciones(transiciones), estados)
 
-    def Interrogacion(self, AFN):
+    def Interrogacion(self, AFN1):
         # Se crea el estado inicial y final
         EI, EF = Estado(self.EN), Estado(self.EN + 1)
         self.EN += 2
         # Se agregan las transiciones
-        transiciones = AFN.transiciones + [
-            Transicion(self.epsilon, EI, AFN.EI),
-            Transicion(self.epsilon, AFN.EF, EF),
+        transiciones = AFN1.transiciones + [
+            Transicion(self.epsilon, EI, AFN1.EI),
+            Transicion(self.epsilon, AFN1.EF, EF),
             Transicion(self.epsilon, EI, EF),
         ]
         # Se eliminan las transiciones repetidas
         trans_dict = {t: None for t in transiciones}
         transiciones = list(trans_dict.keys())
         # Se agregan los estados y transiciones
-        estados = AFN.estados + [EI, EF]
+        estados = AFN1.estados + [EI, EF]
         self.estados.update(estados)
         # Se retorna el AFN
+
         return AFN(EI, EF, self.EN, self.Transiciones(transiciones), estados)
